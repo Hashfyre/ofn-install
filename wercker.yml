@@ -1,0 +1,20 @@
+box: hashfyre/containers:trusty-ansible-lint
+no-response-timeout: 30
+command-timeout: 30
+test:
+    steps:
+      - script:
+        name: Setup dependencies
+        code: bin/setup
+      - script:
+        name: Run syntax checker
+        code: |
+          playbooks=`cat ./tests/playbook_list`
+          echo ${playbooks}
+          for file in ${playbooks}; do
+            ansible-playbook -i inventory/dev --syntax-check ${file}
+          done
+      - script:
+        name: Run ansible-lint
+        code: |
+          ansible-lint site.yml --exclude=community

@@ -1,0 +1,7 @@
+./site.yml
+./playbooks/backup.yml
+./playbooks/deploy.yml
+./playbooks/provision.yml
+./playbooks/rollback.yml
+./playbooks/user.yml
+./playbooks/verify.yml
