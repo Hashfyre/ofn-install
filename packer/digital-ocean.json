@@ -1,0 +1,26 @@
+{
+  "description": "Builds DigitalOcean OFN Server image",
+  "variables": {
+    "do_api_token": "{{env `DO_API_TOKEN`}}",
+    "do_source_image": "{{env `DO_SOURCE_IMAGE`}}",
+    "do_region": "{{env `DO_REGION`}}",
+    "do_ram_size": "{{env `DO_RAM_SIZE`}}",
+    "ofn_region_host": "{{env `OFN_REGION_HOST`}}"
+  },
+
+  "builders": [{
+      "type": "digitalocean",
+      "api_token": "{{user `do_api_token`}}",
+      "image": "{{user `do_source_image`}}",
+      "region": "{{user `do_region`}}",
+      "size": "{{user `do_ram_size`}}"
+  }],
+
+  "provisioners" : [
+  {
+    "type": "ansible-local",
+    "playbook_dir": ".",
+    "playbook_file": "./site.yml",
+    "extra_arguments": ["--extra-vars", "\"--limit={{user `ofn_region_host`}}\""]
+  }]
+}
