@@ -1,0 +1,14 @@
+--- # rollback
+
+# Remove old rollbacks so they aren't used accidentally after errors.
+- name: remove the old rollback
+  file:
+    dest={{ rollback_path }}
+    state=absent
+  tags: clone
+
+- name: remove the old rollback database
+  file:
+    dest={{ rollback_sql_path }}
+    state=absent
+  tags: clone

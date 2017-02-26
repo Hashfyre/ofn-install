@@ -1,0 +1,91 @@
+--- # Build codebase
+#----------------
+# Build codebase
+
+- name: remove the old build path
+  file:
+    dest={{ build_path }}
+    state=absent
+  tags: clone
+
+- name: build codebase from git repo
+  git:
+    repo={{ git_repo }}
+    dest={{ build_path }}
+    version="{{ git_version }}"
+    force=yes
+  tags: clone
+
+- name: detach head for git push deployment
+  shell: git checkout `git rev-parse HEAD`
+  args:
+    chdir: "{{ build_path }}"
+  tags: skip_ansible_lint
+
+
+# TODO: Ugly hack until we have better configuration management
+- name: symlink into the repo
+  file:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    owner={{ unicorn_user }}
+    state=link
+    force=yes
+  with_items:
+    - { src: "{{ assets_path }}", dest: "{{ build_path }}/public/assets" }
+    - { src: "{{ system_path }}", dest: "{{ build_path }}/public/system" }
+    - { src: "{{ spree_path }}", dest: "{{ build_path }}/public/spree" }
+    - { src: "{{ config_path }}/database.yml", dest: "{{ build_path }}/config/database.yml" }
+    - { src: "{{ config_path }}/application.yml", dest: "{{ build_path }}/config/application.yml" }
+    - { src: "{{ config_path }}/seeds.rb", dest: "{{ build_path }}/db/seeds.rb" }
+    - { src: "{{ l10n_path }}/states.yml", dest: "{{ build_path }}/db/default/spree/states.yml" }
+    - { src: "{{ config_path }}/post-receive", dest: "{{ build_path }}/.git/hooks/post-receive" }
+  tags: symlink
+
+- name: symlink the bugsnag file into the config folder
+  file:
+    src="{{ config_path }}/bugsnag.rb"
+    dest={{ build_path }}/config/initializers/bugsnag.rb
+    state=link
+    force=yes
+    owner={{ unicorn_user }}
+    mode=0775
+  when: bugsnag_key != "none"
+  tags: symlink
+
+- name: symlink the db2fog file into the config folder
+  file:
+    src="{{ config_path }}/db2fog.rb"
+    dest={{ build_path }}/config/initializers/db2fog.rb
+    state=link
+    force=yes
+    owner={{ unicorn_user }}
+    mode=0775
+  when: s3_backups_bucket != "none"
+  tags: symlink
+
+- name: symlink the newrelic file into the config folder
+  file:
+    src="{{ config_path }}/newrelic.yml"
+    dest={{ build_path }}/config/newrelic.yml
+    state=link
+    force=yes
+    owner={{ unicorn_user }}
+    mode=0775
+  when: newrelic_key != "none"
+  tags: symlink
+
+- name: bundle install app dependencies
+  #TODO make the "--without development" part conditional on rails_env
+  # Note: the 'LANG=...' is a fix for broken rubygems utf8 handling.
+  command: bash -lc "bundle install --gemfile {{ build_path }}/Gemfile --path /home/{{ unicorn_user }}/.gem --deployment" #--without development test"
+  environment:
+    LANG: "{{ language }}"
+    LC_ALL: "{{ language }}"
+    LC_COLLATE: "{{ language }}"
+  tags:
+    - bundle_app
+    - skip_ansible_lint
+  notify:
+    - precompile assets
+    - restart unicorn
