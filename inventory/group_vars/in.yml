@@ -11,5 +11,6 @@ language_packages:
 l10n_repo: https://github.com/openfoodfoundation/l10n_in.git
 timezone: Delhi
 
+developer_email: joy.bhattacherjee@gmail.com
 users_sysadmin:
   - hashfyre
