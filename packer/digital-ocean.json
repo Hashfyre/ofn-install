@@ -33,7 +33,7 @@
     "inline": [
       "bin/setup"
     ]
-  }
+  },
   {
     "type": "ansible-local",
     "playbook_dir": ".",
