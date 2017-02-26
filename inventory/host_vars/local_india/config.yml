@@ -1,0 +1,6 @@
+---
+
+domain: localhost
+rails_env: production
+
+admin_email: joy.bhattacherjee@gmail.com

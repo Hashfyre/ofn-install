@@ -27,7 +27,7 @@ ie-prod
 # India
 
 [in-packer-local]
-localhost
+local_india
 
 [in-prod]
 www.openfoodnetwork.in
