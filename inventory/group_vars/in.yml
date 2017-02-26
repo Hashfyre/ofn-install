@@ -5,7 +5,7 @@ checkout_zone: India
 country_code: IN
 currency: INR
 locale: en
-language: en.UTF8
+language: en.UTF-8
 language_packages:
   - language-pack-en-base
 l10n_repo: https://github.com/openfoodfoundation/l10n_in.git
