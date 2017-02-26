@@ -1,6 +1,6 @@
 ---
 - name: default_user
-  hosts: ofn_servers
+  hosts: in-packer-local
   remote_user: root
   roles:
     - role: default_user
@@ -10,7 +10,7 @@
 
 
 - name: provision
-  hosts: ofn_servers
+  hosts: in-packer-local
   remote_user: "{{ user }}"
 
   vars:
@@ -71,4 +71,3 @@
       letsencrypt_renewal_command_args: '--renew-hook "systemctl restart nginx"'
       tags: letsencrypt
       when: protocol == "https"
-

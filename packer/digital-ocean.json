@@ -40,7 +40,6 @@
     "playbook_dir": ".",
     "playbook_file": "./site.yml",
     "inventory_file": "./inventory/hosts",
-    "extra_arguments": ["--extra-vars", "\"--limit={{user `ofn_region_host`}}\""],
     "group_vars": "./inventory/group_vars",
     "host_vars": "./inventory/host_vars"
   },
