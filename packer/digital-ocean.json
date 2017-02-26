@@ -18,9 +18,27 @@
 
   "provisioners" : [
   {
+      "type": "shell",
+      "inline": [
+        "sleep 5",
+        "sudo apt-get update",
+        "sudo apt-get -y install libffi-dev libssl-dev",
+        "sudo apt-get -y install python-dev python-pip software-properties-common",
+        "sudo pip install --upgrade setuptools",
+        "sudo pip install ansible==2.2.1",
+      ]
+  },
+  {
     "type": "ansible-local",
     "playbook_dir": ".",
     "playbook_file": "./site.yml",
     "extra_arguments": ["--extra-vars", "\"--limit={{user `ofn_region_host`}}\""]
+  },
+  {
+    "type": "shell",
+    "inline": [
+      "sleep 10",
+      "pip uninstall ansible==2.2.1"
+    ]
   }]
 }
