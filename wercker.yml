@@ -18,3 +18,17 @@ test:
         name: Run ansible-lint
         code: |
           ansible-lint site.yml --exclude=community
+bake-ofn:
+    box: hashfyre/containers:packer
+    steps:
+      - script:
+          name: Create Packer Log
+          code: |
+            PACKER_LOG=ofn_`date +%Y%m%d-%H%M%S`.log
+            echo $PACKER_LOG
+      - script:
+          name: Bake OFN image
+          code: |
+            packer -machine-readable build packer/digital-ocean.json | tee ${PACKER_LOG}
+            BUILD_FAILURE=`grep "Builds finished but no artifacts were created\|Error waiting for SSH:" ${PACKER_LOG} | wc -l`
+            if [ ${BUILD_FAILURE} != 0 ]; then exit $?; fi
