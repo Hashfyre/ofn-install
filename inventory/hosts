@@ -26,11 +26,15 @@ ie-prod
 #------------------------------------------------------------------------------
 # India
 
+[in-packer-local]
+localhost
+
 [in-prod]
 www.openfoodnetwork.in
 
 [in:children]
 in-prod
+in-packer-local
 
 
 
