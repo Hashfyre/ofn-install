@@ -37,11 +37,10 @@
     ]
   },
   {
-    "type": "shell",
-    "inline": [
-      "#!/bin/bash -e",
-      "VAULT_PASS={{user `vault_pass`}}",
-      "echo ${VAULT_PASS} > .vaultpass"
+    "type": "shell-local",
+    "command": "VAULT_PASS={{user `vault_pass`}}; echo ${VAULT_PASS} > .vaultpass ",
+    "execute_command": [
+      "/bin/bash", "-c", "{{.Command}}"
     ]
   },
   {
