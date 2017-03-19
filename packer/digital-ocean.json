@@ -5,7 +5,8 @@
     "do_source_image": "{{env `DO_SOURCE_IMAGE`}}",
     "do_region": "{{env `DO_REGION`}}",
     "do_ram_size": "{{env `DO_RAM_SIZE`}}",
-    "ofn_region_host": "{{env `OFN_REGION_HOST`}}"
+    "ofn_region_host": "{{env `OFN_REGION_HOST`}}",
+    "vault_pass": "{{env `VAULT_PASS`}}"
   },
 
   "builders": [{
@@ -36,12 +37,21 @@
     ]
   },
   {
+    "type": "shell",
+    "inline": [
+      "sleep 5",
+      "VAULT_PASS={{user `vault_pass`}}",
+      "echo $VAULT_PASS > .vaultpass"
+    ]
+  },
+  {
     "type": "ansible-local",
     "playbook_dir": ".",
     "playbook_file": "./site.yml",
     "inventory_file": "./inventory/hosts",
     "group_vars": "./inventory/group_vars",
-    "host_vars": "./inventory/host_vars"
+    "host_vars": "./inventory/host_vars",
+    "extra_arguments": "--vault-password-file=.vaultpass"
   },
   {
     "type": "shell",
