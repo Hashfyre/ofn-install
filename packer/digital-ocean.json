@@ -39,9 +39,9 @@
   {
     "type": "shell",
     "inline": [
-      "sleep 5",
+      "#!/bin/bash -e",
       "VAULT_PASS={{user `vault_pass`}}",
-      "echo $VAULT_PASS > .vaultpass"
+      "echo ${VAULT_PASS} > .vaultpass"
     ]
   },
   {
