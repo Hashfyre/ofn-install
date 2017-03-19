@@ -37,20 +37,12 @@
     ]
   },
   {
-    "type": "shell-local",
-    "command": "VAULT_PASS={{user `vault_pass`}}; echo ${VAULT_PASS} > .vaultpass ",
-    "execute_command": [
-      "/bin/bash", "-c", "{{.Command}}"
-    ]
-  },
-  {
     "type": "ansible-local",
     "playbook_dir": ".",
     "playbook_file": "./site.yml",
     "inventory_file": "./inventory/hosts",
     "group_vars": "./inventory/group_vars",
-    "host_vars": "./inventory/host_vars",
-    "extra_arguments": "--vault-password-file=.vaultpass"
+    "host_vars": "./inventory/host_vars"
   },
   {
     "type": "shell",

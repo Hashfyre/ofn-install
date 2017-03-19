@@ -3,7 +3,6 @@ ssl.crt
 ssl.key
 backups/*
 community
-.vaultpass
 !inventory/host_vars/*/secrets.yml
 *.log
 **/*.retry
