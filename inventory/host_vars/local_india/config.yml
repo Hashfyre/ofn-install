@@ -1,6 +1,6 @@
 ---
 
-domain: beta.openfoodnetwork.in
+domain: openfoodnetwork.in
 rails_env: production
 
 admin_email: joy.bhattacherjee@gmail.com
